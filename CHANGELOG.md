@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.0](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.4.0...ja-netfilter-v2.5.0) (2026-08-22)
+
+
+### Features
+
+* add BuildInfo utility for version reporting ([5efb156](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/5efb156c91bdc6b70cd8927e97b4bd701f36a238))
+
+
+### Bug Fixes
+
+* **ci:** use release_created output for artifact upload condition ([b0577d9](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/b0577d9621be1383af4fba77484d24388f85b190))
+
 ## [2.4.0](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.3.0...ja-netfilter-v2.4.0) (2026-08-22)
 
 
