@@ -1,0 +1,148 @@
+# =============================================================================
+# .github/workflows/release-please.yml - 自动发版工作流
+# ----------------------------------------------------------------------------
+# 使用 googleapis/release-please-action@v4 自动管理发版流程：
+#
+# 工作流程：
+#   1. 监控 Conventional Commits（feat:, fix:, chore:, etc.）
+#   2. 自动创建/更新 "Release PR"，包含：
+#      - 版本号自动 bump
+#      - CHANGELOG.md 自动生成
+#      - 编译产物自动附加到 Release
+#   3. 当 Release PR 被合并时：
+#      - 自动创建 GitHub Release
+#      - 上传编译后的 jar 文件
+#      - 生成版本标签
+#
+# 用法：
+#   - PR 标题或 commit 消息前缀：
+#     - feat: 新功能 → minor 版本
+#     - fix: bug 修复 → patch 版本
+#     - feat!: 重大变更 → major 版本
+#     - chore: 杂项 → 不发版
+#   - 合并 Release PR 即触发正式发版
+# =============================================================================
+name: Release Please
+
+on:
+  push:
+    branches: [ main ]
+    # Conventional Commits 触发器
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+              ${{ runner.os }}-gradle-
+
+      - name: Build all jars (for artifact upload)
+        run: |
+          chmod +x gradlew
+          ./gradlew clean build :ja-netfilter:fatJar --no-daemon --stacktrace
+
+      - name: Prepare release artifacts
+        run: |
+          mkdir -p release-artifacts
+          # 主 agent jar（fat jar）
+          cp ja-netfilter/build/libs/ja-netfilter-2.2.0-all.jar release-artifacts/ja-netfilter.jar
+          # 7 个插件
+          for plugin in dns env hideme native power privacy url; do
+            if [ -f "plugins/${plugin}/build/libs/${plugin}-2.2.0.jar" ]; then
+              cp "plugins/${plugin}/build/libs/${plugin}-2.2.0.jar" "release-artifacts/${plugin}.jar"
+            fi
+          done
+          # 配置文件
+          cp -r config-jetbrains release-artifacts/
+          # vmoptions 模板
+          cp -r vmoptions release-artifacts/
+          # 文档
+          cp README.md release-artifacts/README.md
+          # 激活码
+          cp code.txt release-artifacts/code.txt
+          # 脚本
+          cp -r scripts release-artifacts/
+          # 显示内容
+          echo "=== Release Artifacts ==="
+          ls -la release-artifacts/
+
+      # -----------------------------------------------------------------------------
+      # 运行 release-please 创建/更新 Release PR
+      # -----------------------------------------------------------------------------
+      - id: release-please
+        uses: googleapis/release-please-action@v4
+        with:
+          # release 类型配置
+          release-type: gradle
+          package-name: ja-netfilter
+
+          # changelog 包含所有类型
+          changelog-types: |
+            - feat
+            - fix
+            - perf
+            - refactor
+            - docs
+            - chore
+            - revert
+
+          # 版本号控制（如果想手动控制）
+          # default-branch: main
+          # pull-request-title-pattern: 'chore(main): release ${version}'
+          # pull-request-header: ":robot: Release Please"
+          # pull-request-footer: ":robot: Managed by Release Please"
+
+          # 上传 release-artifacts 中的所有文件
+          artifacts: |
+            release-artifacts/ja-netfilter.jar
+            release-artifacts/dns.jar
+            release-artifacts/env.jar
+            release-artifacts/hideme.jar
+            release-artifacts/native.jar
+            release-artifacts/power.jar
+            release-artifacts/privacy.jar
+            release-artifacts/url.jar
+            release-artifacts/config-jetbrains/*.conf
+            release-artifacts/vmoptions/*.vmoptions
+            release-artifacts/scripts/*.sh
+            release-artifacts/scripts/*.vbs
+            release-artifacts/README.md
+            release-artifacts/code.txt
+
+      # -----------------------------------------------------------------------------
+      # 编译产物上传（（供 Release 使用）
+      # -----------------------------------------------------------------------------
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ja-netfilter-release-artifacts
+          path: release-artifacts/
+          retention-days: 30
