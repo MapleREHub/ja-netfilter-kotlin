@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Plugin-Class: com.janetfilter.plugins.power.PowerPlugin
+Built-By: kotlin-jetbrains-reverse

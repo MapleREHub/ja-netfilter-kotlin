@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Plugin-Class: com.janetfilter.plugins.url.URLFilterPlugin
+Built-By: kotlin-jetbrains-reverse

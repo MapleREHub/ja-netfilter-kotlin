@@ -1,0 +1,60 @@
+# =============================================================================
+# .gitignore - Git 忽略文件配置
+# =============================================================================
+
+# 构建产物
+build/
+*/build/
+*/*/build/
+*/*/*/build/
+
+# Gradle 缓存
+.gradle/
+.gradle/
+*/*/.gradle/
+*/*/*/.gradle/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志文件
+logs/
+*.log
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# 编译产物
+dist/
+*.jar
+!plugins-jetbrains/*.jar
+!config-jetbrains/
+
+# 用户文件
+*.iml
+local.properties
+
+# 自动生成的文件
+**/generated/
+**/Generated.java
+
+# 测试产物
+test-results/
+reports/
+build/reports/
