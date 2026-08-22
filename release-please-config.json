@@ -1,5 +1,5 @@
 {
-  "release-type": "gradle",
+  "release-type": "java",
   "package-name": "ja-netfilter",
   "changelog-path": "CHANGELOG.md",
   "pull-request-title-pattern": "chore(release): release ${version}",
