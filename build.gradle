@@ -1,14 +1,10 @@
+// Placeholder build.gradle for release-please path detection
+// This project uses build.gradle.kts (Kotlin DSL)
+// Real build configuration is in build.gradle.kts
+
 plugins {
     id 'java'
 }
 
 group = 'com.janetfilter'
 version = '2.2.0'
-
-sourceSets {
-    main {
-        java {
-            srcDirs = []
-        }
-    }
-}
