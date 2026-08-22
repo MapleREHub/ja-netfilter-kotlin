@@ -42,7 +42,9 @@ logs/
 
 # 编译产物
 dist/
+# 排除所有 jar，但保留 Gradle wrapper jar
 *.jar
+!gradle/wrapper/gradle-wrapper.jar
 !plugins-jetbrains/*.jar
 !config-jetbrains/
 
