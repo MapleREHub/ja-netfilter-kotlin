@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.0](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.3.0...ja-netfilter-v2.4.0) (2026-08-22)
+
+
+### Features
+
+* **ci:** upload build artifacts to GitHub Release ([ee805ba](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/ee805ba806788c60688ad0126b8f7aa6ea034b37))
+* test artifact upload on release ([7f52d5f](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/7f52d5f6deaf3283afeb11e1393d129954e6c9b1))
+
 ## [2.3.0](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.2.0...ja-netfilter-v2.3.0) (2026-08-22)
 
 
