@@ -10,11 +10,10 @@
 #      - CHANGELOG.md 自动生成
 #   3. 当 Release PR 被合并时：
 #      - 自动创建 GitHub Release
-#      - 上传所有构建产物（jar 文件、配置、脚本、文档）
+#      - 下载构建产物并附加到 Release
 #
 # 配置说明：
-#   - 所有 release-please 配置在仓库根部的 release-please-config.json 中
-#   - artifacts 配置定义了要上传到 Release 的文件
+#   - release-please 配置在 release-please-config.json
 #
 # 用法：
 #   - PR 标题或 commit 消息前缀：
@@ -65,16 +64,18 @@ jobs:
           restore-keys: |
               ${{ runner.os }}-gradle-
 
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Build all jars (for artifact upload)
         run: |
-          chmod +x gradlew
           ./gradlew clean build :ja-netfilter:fatJar --no-daemon --stacktrace
 
       - name: Prepare release artifacts
         run: |
           mkdir -p release-artifacts
           # 主 agent jar（fat jar）
-          cp ja-netfilter/build/libs/ja-netfilter-2.2.0-all.jar release-artifacts/ja-netfilter.jar
+          cp ja-netfilter/build/libs/ja-netfilter-*-all.jar release-artifacts/ja-netfilter.jar
           # 7 个插件
           for plugin in dns env hideme native power privacy url; do
             if [ -f "plugins/${plugin}/build/libs/${plugin}-2.2.0.jar" ]; then
@@ -82,15 +83,15 @@ jobs:
             fi
           done
           # 配置文件
-          cp -r config-jetbrains release-artifacts/ || true
+          cp -r config-jetbrains release-artifacts/ 2>/dev/null || true
           # vmoptions 模板
-          cp -r vmoptions release-artifacts/ || true
+          cp -r vmoptions release-artifacts/ 2>/dev/null || true
           # 文档
-          cp README.md release-artifacts/ || true
+          cp README.md release-artifacts/ 2>/dev/null || true
           # 激活码
-          cp code.txt release-artifacts/ || true
+          cp code.txt release-artifacts/ 2>/dev/null || true
           # 脚本
-          cp -r scripts release-artifacts/ || true
+          cp -r scripts release-artifacts/ 2>/dev/null || true
           # 显示内容
           echo "=== Release Artifacts ==="
           ls -la release-artifacts/
@@ -98,13 +99,32 @@ jobs:
       # -----------------------------------------------------------------------------
       # 运行 release-please 创建/更新 Release PR
       # -----------------------------------------------------------------------------
-      # 使用 release-please-config.json 中的所有配置
       - id: release-please
         uses: googleapis/release-please-action@v4
         with:
           config-file: release-please-config.json
 
-      - name: Upload build artifacts
+      # -----------------------------------------------------------------------------
+      # 上传构建产物到 GitHub Release
+      # -----------------------------------------------------------------------------
+      - name: Upload Release Artifacts
+        if: steps.release-please.outputs.release-created
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-artifacts/ja-netfilter.jar
+            release-artifacts/dns.jar
+            release-artifacts/env.jar
+            release-artifacts/hideme.jar
+            release-artifacts/native.jar
+            release-artifacts/power.jar
+            release-artifacts/privacy.jar
+            release-artifacts/url.jar
+          fail_on_unmatched_files: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload workflow artifacts (backup)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ja-netfilter-release-artifacts
