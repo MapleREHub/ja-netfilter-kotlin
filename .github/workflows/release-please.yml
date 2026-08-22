@@ -107,8 +107,9 @@ jobs:
       # -----------------------------------------------------------------------------
       # 上传构建产物到 GitHub Release
       # -----------------------------------------------------------------------------
+      # Use release-please outputs to get the created release
       - name: Upload Release Artifacts
-        if: steps.release-please.outputs.release-created
+        if: success() && steps.release-please.outputs.release_created
         uses: softprops/action-gh-release@v2
         with:
           files: |
