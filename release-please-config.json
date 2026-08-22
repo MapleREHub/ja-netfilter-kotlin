@@ -62,7 +62,6 @@
       "path": "."
     }
   },
-  "bootstrap-sha": "55a1009",
   "initial-version": "2.2.0",
   "extra-files": [
     "gradle.properties"

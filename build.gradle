@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.janetfilter'
+version = '2.2.0'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = []
+        }
+    }
+}
