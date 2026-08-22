@@ -3,6 +3,36 @@
 > 基于逆向工程的 JetBrains 激活工具，使用 Kotlin 重新实现。
 > 本项目仅供学习和研究使用。
 
+## ⚡ 快速安装（从 Release 一键安装）
+
+**Linux / macOS:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/MapleREHub/ja-netfilter-kotlin/main/scripts/install-from-release.sh | bash
+```
+
+**Windows (PowerShell):**
+
+```powershell
+iwr https://raw.githubusercontent.com/MapleREHub/ja-netfilter-kotlin/main/scripts/install-from-release.ps1 -OutFile install.ps1
+.\install.ps1
+```
+
+**Windows (CMD):**
+
+```cmd
+curl -fsSL https://raw.githubusercontent.com/MapleREHub/ja-netfilter-kotlin/main/scripts/install-from-release.bat -o install.bat
+install.bat
+```
+
+## 🚀 自动发版
+
+本项目使用 [release-please](https://github.com/googleapis/release-please) 自动发版。
+- CI 工作流: `.github/workflows/ci.yml` (多平台编译)
+- Release 工作流: `.github/workflows/release-please.yml` (自动发版)
+
+每次合并 Release PR 即触发正式发版，详情见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
 ## 📋 目录
 
 - [项目简介](#项目简介)
