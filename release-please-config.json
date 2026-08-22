@@ -1,5 +1,5 @@
 {
-  "release-type": "java",
+  "release-type": "simple",
   "package-name": "ja-netfilter",
   "changelog-path": "CHANGELOG.md",
   "pull-request-title-pattern": "chore(release): release ${version}",
@@ -58,12 +58,7 @@
     }
   ],
   "packages": {
-    "ja-netfilter": {
-      "path": "."
-    }
+    ".": {}
   },
-  "initial-version": "2.2.0",
-  "extra-files": [
-    "gradle.properties"
-  ]
+  "initial-version": "2.2.0"
 }
