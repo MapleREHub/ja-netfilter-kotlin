@@ -1,0 +1,5 @@
+# JetBrains 激活码文件
+# 此文件保存激活码（License ID-Base64Payload-Base64Signature）
+# 从 https://ckey.run 获取最新激活码
+
+PLACEHOLDER_LICENSE_KEY_HERE
