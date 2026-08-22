@@ -8,11 +8,13 @@
 #   2. 自动创建/更新 "Release PR"，包含：
 #      - 版本号自动 bump
 #      - CHANGELOG.md 自动生成
-#      - 编译产物自动附加到 Release
 #   3. 当 Release PR 被合并时：
 #      - 自动创建 GitHub Release
-#      - 上传编译后的 jar 文件
-#      - 生成版本标签
+#      - 上传所有构建产物（jar 文件、配置、脚本、文档）
+#
+# 配置说明：
+#   - 所有 release-please 配置在仓库根部的 release-please-config.json 中
+#   - artifacts 配置定义了要上传到 Release 的文件
 #
 # 用法：
 #   - PR 标题或 commit 消息前缀：
@@ -27,7 +29,6 @@ name: Release Please
 on:
   push:
     branches: [ main ]
-    # Conventional Commits 触发器
     paths-ignore:
       - '**.md'
       - 'docs/**'
@@ -81,15 +82,15 @@ jobs:
             fi
           done
           # 配置文件
-          cp -r config-jetbrains release-artifacts/
+          cp -r config-jetbrains release-artifacts/ || true
           # vmoptions 模板
-          cp -r vmoptions release-artifacts/
+          cp -r vmoptions release-artifacts/ || true
           # 文档
-          cp README.md release-artifacts/README.md
+          cp README.md release-artifacts/ || true
           # 激活码
-          cp code.txt release-artifacts/code.txt
+          cp code.txt release-artifacts/ || true
           # 脚本
-          cp -r scripts release-artifacts/
+          cp -r scripts release-artifacts/ || true
           # 显示内容
           echo "=== Release Artifacts ==="
           ls -la release-artifacts/
@@ -97,49 +98,12 @@ jobs:
       # -----------------------------------------------------------------------------
       # 运行 release-please 创建/更新 Release PR
       # -----------------------------------------------------------------------------
+      # 使用 release-please-config.json 中的所有配置
       - id: release-please
         uses: googleapis/release-please-action@v4
         with:
-          # release 类型配置
-          release-type: gradle
-          package-name: ja-netfilter
+          config-file: release-please-config.json
 
-          # changelog 包含所有类型
-          changelog-types: |
-            - feat
-            - fix
-            - perf
-            - refactor
-            - docs
-            - chore
-            - revert
-
-          # 版本号控制（如果想手动控制）
-          # default-branch: main
-          # pull-request-title-pattern: 'chore(main): release ${version}'
-          # pull-request-header: ":robot: Release Please"
-          # pull-request-footer: ":robot: Managed by Release Please"
-
-          # 上传 release-artifacts 中的所有文件
-          artifacts: |
-            release-artifacts/ja-netfilter.jar
-            release-artifacts/dns.jar
-            release-artifacts/env.jar
-            release-artifacts/hideme.jar
-            release-artifacts/native.jar
-            release-artifacts/power.jar
-            release-artifacts/privacy.jar
-            release-artifacts/url.jar
-            release-artifacts/config-jetbrains/*.conf
-            release-artifacts/vmoptions/*.vmoptions
-            release-artifacts/scripts/*.sh
-            release-artifacts/scripts/*.vbs
-            release-artifacts/README.md
-            release-artifacts/code.txt
-
-      # -----------------------------------------------------------------------------
-      # 编译产物上传（（供 Release 使用）
-      # -----------------------------------------------------------------------------
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
