@@ -107,11 +107,12 @@ jobs:
       # -----------------------------------------------------------------------------
       # 上传构建产物到 GitHub Release
       # -----------------------------------------------------------------------------
-      # Use release-please outputs to get the created release
+      # Use release-please outputs to get the created release tag
       - name: Upload Release Artifacts
-        if: success() && steps.release-please.outputs.release_created
+        if: steps.release-please.outputs.release_created
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.release-please.outputs.tag_name }}
           files: |
             release-artifacts/ja-netfilter.jar
             release-artifacts/dns.jar
