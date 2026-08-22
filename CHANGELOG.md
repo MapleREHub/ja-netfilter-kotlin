@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.6.0](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.5.0...ja-netfilter-v2.6.0) (2026-08-22)
+
+
+### Features
+
+* add ReleaseInfo utility for version detection ([92e192f](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/92e192ff7663ab4f8dba18417016441c7920fccd))
+
+
+### Bug Fixes
+
+* **ci:** specify tag_name for softprops action-gh-release ([9eca134](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/9eca13477db9b6de445253e9339fbdbfe47781e9))
+* correct malformed comment in ReleaseInfo.kt ([948dd6d](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/948dd6d0f68971111bbd1f28b13a42945c0bb809))
+
 ## [2.5.0](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.4.0...ja-netfilter-v2.5.0) (2026-08-22)
 
 
