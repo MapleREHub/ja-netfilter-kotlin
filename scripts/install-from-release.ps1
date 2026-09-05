@@ -1,4 +1,4 @@
-# =============================================================================
+﻿# =============================================================================
 # install-from-release.ps1 - 从 GitHub Release 一键安装最新版本 (PowerShell)
 # ----------------------------------------------------------------------------
 # 该脚本自动从 GitHub Release 下载最新版本的 ja-netfilter 并部署到当前目录。
@@ -47,13 +47,19 @@ try {
         Write-Host "[1/5] 获取最新版本号..."
         $apiUrl = "https://api.github.com/repos/$Repo/releases/latest"
         $release = Invoke-RestMethod -Uri $apiUrl
-        $Version = $release.tag_name -replace '^v', ''
-        if ([string]::IsNullOrEmpty($Version)) {
+        # 直接使用远端 tag（如 ja-netfilter-v2.6.0），不要再拼 "v" 前缀
+        $VersionTag = $release.tag_name
+        if ([string]::IsNullOrEmpty($VersionTag)) {
             throw "无法获取最新版本号"
+        }
+    } else {
+        # 允许传入 "2.6.0" / "v2.6.0" / "ja-netfilter-v2.6.0" 三种形式
+        $VersionTag = $Version
+        if ($VersionTag -notmatch '^ja-netfilter-') {
+            $VersionTag = "ja-netfilter-v$($VersionTag -replace '^v', '')"
         }
     }
 
-    $VersionTag = "v$Version"
     Write-Host "[1/5] 版本: $VersionTag"
 
     # 下载源码包
