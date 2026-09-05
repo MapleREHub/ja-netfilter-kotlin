@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.1](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.6.0...ja-netfilter-v2.6.1) (2026-09-05)
+
+
+### Bug Fixes
+
+* **scripts:** repair install-from-release.ps1 encoding and release tag handling ([997b183](https://github.com/MapleREHub/ja-netfilter-kotlin/commit/997b183d97025a7fe33cb752109c4ebd887e124b))
+
 ## [2.6.0](https://github.com/MapleREHub/ja-netfilter-kotlin/compare/ja-netfilter-v2.5.0...ja-netfilter-v2.6.0) (2026-08-22)
 
 
